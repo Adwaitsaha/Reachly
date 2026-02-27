@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { LayoutGrid, List, MapPin, Calendar, FileText, Users } from "lucide-react";
-import { mockJobs } from "../data/mockData";
+import { useJobs } from "@/hooks/useJobs";
 
 type ViewMode = "table" | "kanban";
 
 export function Jobs() {
   const [viewMode, setViewMode] = useState<ViewMode>("table");
+  const { data: jobs, loading } = useJobs();
 
   const kanbanColumns = {
-    Applied: mockJobs.filter((j) => j.status === "Applied"),
-    Interview: mockJobs.filter((j) => j.status === "Interview"),
-    Offer: mockJobs.filter((j) => j.status === "Offer"),
+    Applied: jobs.filter((j) => j.status === "Applied"),
+    Interview: jobs.filter((j) => j.status === "Interview"),
+    Offer: jobs.filter((j) => j.status === "Offer"),
   };
 
   return (
@@ -18,7 +19,7 @@ export function Jobs() {
       <div className="mb-8 flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-semibold text-gray-900 mb-2">Jobs</h1>
-          <p className="text-gray-600">Track all your job applications</p>
+          <p className="text-gray-600">Auto-detected from your emails</p>
         </div>
         
         <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg p-1">
@@ -47,7 +48,9 @@ export function Jobs() {
         </div>
       </div>
 
-      {viewMode === "table" ? (
+      {loading ? (
+        <div className="text-gray-500">Loading...</div>
+      ) : viewMode === "table" ? (
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -77,7 +80,7 @@ export function Jobs() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {mockJobs.map((job) => (
+                {jobs.map((job) => (
                   <tr key={job.id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-6 py-4">
                       <div className="font-medium text-gray-900">{job.role}</div>

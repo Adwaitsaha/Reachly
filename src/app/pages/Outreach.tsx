@@ -1,17 +1,23 @@
 import { Mail, Linkedin } from "lucide-react";
-import { mockOutreach } from "../data/mockData";
+import { useInteractions } from "@/hooks/useInteractions";
 
 export function Outreach() {
+  const { data: outreach, loading } = useInteractions();
+
+  if (loading) {
+    return <div className="p-8 text-gray-500">Loading...</div>;
+  }
+
   return (
     <div className="p-8">
       <div className="mb-8">
         <h1 className="text-3xl font-semibold text-gray-900 mb-2">Outreach</h1>
-        <p className="text-gray-600">Track all your networking interactions</p>
+        <p className="text-gray-600">Auto-tracked from Gmail and LinkedIn</p>
       </div>
 
       <div className="bg-white rounded-xl border border-gray-200">
         <div className="divide-y divide-gray-100">
-          {mockOutreach.map((outreach) => (
+          {outreach.map((outreach) => (
             <div
               key={outreach.id}
               className="p-6 hover:bg-gray-50 transition-colors cursor-pointer"

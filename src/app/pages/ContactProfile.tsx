@@ -1,10 +1,22 @@
 import { useParams, Link } from "react-router";
 import { Mail, Linkedin, Tag, ArrowLeft, Calendar, FileText, MessageSquare } from "lucide-react";
-import { mockContacts, mockJobs, mockOutreach } from "../data/mockData";
+import { useContacts } from "@/hooks/useContacts";
+import { useJobs } from "@/hooks/useJobs";
+import { useInteractions } from "@/hooks/useInteractions";
 
 export function ContactProfile() {
   const { id } = useParams();
-  const contact = mockContacts.find((c) => c.id === id);
+  const { data: contacts, loading: loadingContacts } = useContacts();
+  const { data: jobs, loading: loadingJobs } = useJobs();
+  const { data: interactions, loading: loadingInteractions } = useInteractions();
+
+  const loading = loadingContacts || loadingJobs || loadingInteractions;
+
+  if (loading) {
+    return <div className="p-8 text-gray-500">Loading...</div>;
+  }
+
+  const contact = contacts.find((c) => c.id === id);
 
   if (!contact) {
     return (
@@ -14,12 +26,12 @@ export function ContactProfile() {
     );
   }
 
-  const contactJobs = mockJobs.filter((job) =>
+  const contactJobs = jobs.filter((job) =>
     job.contacts.includes(contact.name)
   );
 
-  const contactOutreach = mockOutreach.filter(
-    (outreach) => outreach.contactId === contact.id
+  const contactOutreach = interactions.filter(
+    (interaction) => interaction.contactId === contact.id
   );
 
   return (
@@ -216,15 +228,12 @@ export function ContactProfile() {
           <div className="bg-white rounded-xl border border-gray-200 p-6">
             <h3 className="font-semibold text-gray-900 mb-4">Quick Actions</h3>
             <div className="space-y-2">
-              <button className="w-full px-4 py-2 bg-emerald-50 text-emerald-600 rounded-lg hover:bg-emerald-100 transition-colors text-sm font-medium">
+              <a
+                href={`mailto:${contact.email}`}
+                className="w-full flex justify-center px-4 py-2 bg-emerald-50 text-emerald-600 rounded-lg hover:bg-emerald-100 transition-colors text-sm font-medium"
+              >
                 Send Email
-              </button>
-              <button className="w-full px-4 py-2 bg-gray-50 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium">
-                Schedule Follow-up
-              </button>
-              <button className="w-full px-4 py-2 bg-gray-50 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium">
-                Add Note
-              </button>
+              </a>
             </div>
           </div>
         </div>

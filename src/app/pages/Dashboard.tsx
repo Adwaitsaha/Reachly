@@ -1,12 +1,18 @@
 import { Link } from "react-router";
 import { ArrowRight, TrendingUp, Calendar, Activity } from "lucide-react";
-import { mockJobs, mockOutreach, mockReminders } from "../data/mockData";
+import { useJobs } from "@/hooks/useJobs";
+import { useInteractions } from "@/hooks/useInteractions";
+import { useReminders } from "@/hooks/useReminders";
 
 export function Dashboard() {
+  const { data: jobs } = useJobs();
+  const { data: outreach } = useInteractions();
+  const { data: reminders } = useReminders();
+
   const pipelineStats = {
-    applied: mockJobs.filter((j) => j.status === "Applied").length,
-    interview: mockJobs.filter((j) => j.status === "Interview").length,
-    offer: mockJobs.filter((j) => j.status === "Offer").length,
+    applied: jobs.filter((j) => j.status === "Applied").length,
+    interview: jobs.filter((j) => j.status === "Interview").length,
+    offer: jobs.filter((j) => j.status === "Offer").length,
   };
 
   return (
@@ -75,7 +81,7 @@ export function Dashboard() {
             </div>
           </div>
           <div className="divide-y divide-gray-100">
-            {mockOutreach.slice(0, 4).map((outreach) => (
+            {outreach.slice(0, 4).map((outreach) => (
               <div key={outreach.id} className="p-4 hover:bg-gray-50 transition-colors">
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex-shrink-0" />
@@ -124,7 +130,7 @@ export function Dashboard() {
             </div>
           </div>
           <div className="divide-y divide-gray-100">
-            {mockReminders.slice(0, 4).map((reminder) => (
+            {reminders.slice(0, 4).map((reminder) => (
               <div key={reminder.id} className="p-4 hover:bg-gray-50 transition-colors">
                 <div className="flex items-start gap-3">
                   <div className="mt-1">

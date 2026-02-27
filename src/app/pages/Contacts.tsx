@@ -1,17 +1,23 @@
 import { Link } from "react-router";
 import { Mail, Linkedin, MapPin, Tag } from "lucide-react";
-import { mockContacts } from "../data/mockData";
+import { useContacts } from "@/hooks/useContacts";
 
 export function Contacts() {
+  const { data: contacts, loading } = useContacts();
+
+  if (loading) {
+    return <div className="p-8 text-gray-500">Loading...</div>;
+  }
+
   return (
     <div className="p-8">
       <div className="mb-8">
         <h1 className="text-3xl font-semibold text-gray-900 mb-2">Contacts</h1>
-        <p className="text-gray-600">Manage your professional network</p>
+        <p className="text-gray-600">Auto-tracked from Gmail and LinkedIn</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {mockContacts.map((contact) => (
+        {contacts.map((contact) => (
           <Link
             key={contact.id}
             to={`/contacts/${contact.id}`}

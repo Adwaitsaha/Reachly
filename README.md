@@ -1,5 +1,5 @@
 
-  # Design Reachly SaaS Web App
+  # Reachly SaaS Web App
 
   This is a code bundle for Design Reachly SaaS Web App. The original project is available at https://www.figma.com/design/bfuWIDK84FIgK7N9qQnjys/Design-Reachly-SaaS-Web-App.
 
